@@ -1,6 +1,6 @@
 import { Typography, Button, Container, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 
 function Landing() {
   return (
@@ -43,17 +43,17 @@ function Landing() {
             transition={{ delay: 0.6, duration: 1 }}
           >
             <Typography variant="h5" sx={{ color: "#4E5A64", marginBottom: 3 }}>
-              Guarda bares (por si algun día los quieres cerrar), rincones, ideas o
-              planes antes de que tu yo del futuro te odie. Tu memoria ya no está
-              sola.
+              Guarda bares (por si algun día los quieres cerrar), rincones,
+              ideas o planes antes de que tu yo del futuro te odie. Tu memoria
+              ya no está sola.
             </Typography>
           </motion.div>
           <Box
             sx={{
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" }, 
+              flexDirection: { xs: "column", sm: "row" },
               justifyContent: "center",
-              gap: 2, 
+              gap: 2,
               marginTop: 2,
             }}
           >
@@ -67,9 +67,9 @@ function Landing() {
                 color="primary"
                 sx={{
                   transition: "all 0.3s ease",
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                   },
                 }}
                 component={Link}
@@ -87,12 +87,12 @@ function Landing() {
                 variant="outlined"
                 color="primary"
                 sx={{
-                  border: '2px solid #1e88e5',
+                  border: "2px solid #1e88e5",
                   fontWeight: "bold",
                   transition: "all 0.3s ease",
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                  "&:hover": {
+                    transform: "scale(1.05)",
+                    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
                   },
                 }}
                 component={Link}

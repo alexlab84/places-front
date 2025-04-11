@@ -1,6 +1,6 @@
 import { Container, Typography } from "@mui/material";
 import AppRoutes from "./routes/AppRoutes";
-import NavBar from "./layouts/NavBar";
+import MainLayout from "./layouts/MainLayout";
 import { useState } from "react";
 import "./styles/index.scss";
 
@@ -12,14 +12,9 @@ function App() {
   };
 
   return (
-    <div
-      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-    >
-      <NavBar drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
-      <Container component="main" style={{ flex: 1 }}>
-        <AppRoutes />
-      </Container>
-    </div>
+    <MainLayout drawerOpen={drawerOpen} toggleDrawer={toggleDrawer}>
+      <AppRoutes />
+    </MainLayout>
   );
 }
 
