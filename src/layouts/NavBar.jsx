@@ -7,8 +7,6 @@ const NavBar = ({ drawerOpen, toggleDrawer }) => {
   return (
     <>
       <AppBar position="sticky" sx={{ backgroundColor: "#4A90E2" }}>
-        {" "}
-        {/* Color pastel suave */}
         <Toolbar>
           <IconButton
             edge="start"
