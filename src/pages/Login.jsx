@@ -8,37 +8,32 @@ function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);  // Estado de carga
-  
-  const navigate = useNavigate();  // Instanciamos el hook para redirigir
+  const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
 
     const credentials = {
-      email,  // Usar email en lugar de username
+      email,
       password,
     };
-  
+
     try {
-      // Usar axiosInstance en lugar de axios directamente
-      const response = await axiosInstance.post('api/login/', credentials);
+      const response = await axiosInstance.post("api/login/", credentials);
+      const { access, refresh } = response.data;
 
-      const { access, refresh } = response.data;  // Cambiar según la respuesta
+      localStorage.setItem("jwt_token", access);
+      localStorage.setItem("refresh_token", refresh);
 
-      // Almacenar los tokens en localStorage
-      localStorage.setItem('jwt_token', access);
-      localStorage.setItem('refresh_token', refresh);
-
-      console.log('Login exitoso');
       navigate("/dashboard");
     } catch (error) {
-      setError('Error al intentar iniciar sesión');
+      setError("Error al intentar iniciar sesión");
       console.error(error);
     }
   };
-  
 
   return (
     <Box
@@ -139,9 +134,9 @@ function Login() {
                   backgroundColor: "#357ABD",
                 },
               }}
-              disabled={loading}  // Deshabilitar el botón mientras se carga
+              disabled={loading}
             >
-              {loading ? "Cargando..." : "Iniciar sesión"}  {/* Cambiar el texto según el estado de carga */}
+              {loading ? "Cargando..." : "Iniciar sesión"}
             </Button>
           </motion.div>
         </form>

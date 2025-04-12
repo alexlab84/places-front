@@ -1,26 +1,25 @@
 import React from 'react';
 import { Box, TextField, Button, Typography, Container } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import useSignupForm from '../hooks/useSignUpForm';  // Asegúrate de que la ruta sea correcta
+import useSignupForm from '../hooks/useSignUpForm';  
 
 function SignUp() {
   const {
     email,
     password,
-    username,
     error,
     setEmail,
     setPassword,
-    setUsername,
     handleSubmit,
   } = useSignupForm();
 
   const navigate = useNavigate();
 
   const handleFormSubmit = async (e) => {
+    e.preventDefault();
     const { success } = await handleSubmit(e);
     if (success) {
-      navigate('/dashboard');  // Redirige al login si el registro fue exitoso
+      navigate('/dashboard');  
     }
   };
 
@@ -49,14 +48,6 @@ function SignUp() {
         )}
 
         <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
-          <TextField
-            label="Nombre de Usuario"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
           <TextField
             label="Correo Electrónico"
             type="email"

@@ -9,24 +9,22 @@ const usePlaces = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const token = localStorage.getItem("jwt_token");
+        const token = localStorage.getItem("access_token");
 
-        if(!token) {
-          setError('No estás autenticado.');
+        if (!token) {
+          setError("No estás autenticado.");
           setLoading(false);
           return;
         }
-
         const config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
-
         const response = await axiosInstance.get("api/places/", config);
 
         setPlaces(response.data);
-        setLoading(false);  
+        setLoading(false);
       } catch (error) {
         setError("Error al obtener los lugares.");
         setLoading(false);
