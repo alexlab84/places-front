@@ -1,18 +1,20 @@
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import axiosInstance from "../api/axiosInstance";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (email && password) {
-      console.log("Login success", { email, password });
-    } else {
-      setError("Por favor ingresa tus credenciales");
+  const handleSubmit = async (email, password) => {
+    const response = await axiosInstance.post('http://127.0.0.1:8000/api/login/', { email, password });
+    if (response.status === 200) {
+      const token = response.data.access_token;
+      localStorage.setItem('jwt_token', token);  // Guardar el token en localStorage o cookies
+      // Ahora puedes usar este token en futuras solicitudes
     }
   };
 

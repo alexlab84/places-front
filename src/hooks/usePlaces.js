@@ -9,7 +9,8 @@ const usePlaces = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const response = await axiosInstance.get("/");
+        // Realizando la solicitud con la URL correcta
+        const response = await axiosInstance.get('api/places/'); // Añadimos 'api/' antes de 'places/'
         setPlaces(response.data);
         setLoading(false);
       } catch (err) {

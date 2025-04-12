@@ -96,7 +96,7 @@ function Landing() {
                   },
                 }}
                 component={Link}
-                to="/signup"
+                to="/signUp"
               >
                 Apúntame al club
               </Button>
