@@ -10,7 +10,7 @@ const usePlaces = () => {
     const fetchPlaces = async () => {
       try {
         // Realizando la solicitud con la URL correcta
-        const response = await axiosInstance.get('api/places/'); // Añadimos 'api/' antes de 'places/'
+        const response = await axiosInstance.get('places/'); 
         setPlaces(response.data);
         setLoading(false);
       } catch (err) {

@@ -12,7 +12,7 @@ const useSignUpForm = () => {
     e.preventDefault();  // Evita que el formulario se recargue al enviarlo
 
     try {
-      const response = await axiosInstance.post('api/register/', {
+      const response = await axiosInstance.post('register/', {
         username,
         email,
         password,

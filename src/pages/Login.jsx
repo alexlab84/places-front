@@ -1,22 +1,44 @@
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // Importa el hook de React Router
 import axiosInstance from "../api/axiosInstance";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);  // Estado de carga
   
+  const navigate = useNavigate();  // Instanciamos el hook para redirigir
 
-  const handleSubmit = async (email, password) => {
-    const response = await axiosInstance.post('http://127.0.0.1:8000/api/login/', { email, password });
-    if (response.status === 200) {
-      const token = response.data.access_token;
-      localStorage.setItem('jwt_token', token);  // Guardar el token en localStorage o cookies
-      // Ahora puedes usar este token en futuras solicitudes
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+
+    const credentials = {
+      email,  // Usar email en lugar de username
+      password,
+    };
+  
+    try {
+      // Usar axiosInstance en lugar de axios directamente
+      const response = await axiosInstance.post('api/login/', credentials);
+
+      const { access, refresh } = response.data;  // Cambiar según la respuesta
+
+      // Almacenar los tokens en localStorage
+      localStorage.setItem('jwt_token', access);
+      localStorage.setItem('refresh_token', refresh);
+
+      console.log('Login exitoso');
+      navigate("/dashboard");
+    } catch (error) {
+      setError('Error al intentar iniciar sesión');
+      console.error(error);
     }
   };
+  
 
   return (
     <Box
@@ -117,8 +139,9 @@ function Login() {
                   backgroundColor: "#357ABD",
                 },
               }}
+              disabled={loading}  // Deshabilitar el botón mientras se carga
             >
-              Iniciar sesión
+              {loading ? "Cargando..." : "Iniciar sesión"}  {/* Cambiar el texto según el estado de carga */}
             </Button>
           </motion.div>
         </form>
