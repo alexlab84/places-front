@@ -1,39 +1,17 @@
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom"; // Importa el hook de React Router
-import axiosInstance from "../api/axiosInstance";
+import useLoginForm from "../hooks/useLoginForm";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setLoading(true);
-
-    const credentials = {
-      email,
-      password,
-    };
-
-    try {
-      const response = await axiosInstance.post("api/login/", credentials);
-      const { access, refresh } = response.data;
-
-      localStorage.setItem("jwt_token", access);
-      localStorage.setItem("refresh_token", refresh);
-
-      navigate("/dashboard");
-    } catch (error) {
-      setError("Error al intentar iniciar sesión");
-      console.error(error);
-    }
-  };
+  const {
+    email,
+    password,
+    error,
+    loading,
+    setEmail,
+    setPassword,
+    handleLogin,
+  } = useLoginForm();
 
   return (
     <Box
@@ -80,7 +58,7 @@ function Login() {
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+        <form onSubmit={handleLogin} style={{ width: "100%" }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
