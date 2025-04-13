@@ -1,18 +1,12 @@
-import React from 'react';
-import { Box, TextField, Button, Typography, Container } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
-import useSignupForm from '../hooks/useSignUpForm';  
-import { motion } from 'framer-motion';
+import React from "react";
+import { Box, TextField, Button, Typography, Container } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import useSignupForm from "../hooks/useSignUpForm";
+import { motion } from "framer-motion";
 
 function SignUp() {
-  const {
-    email,
-    password,
-    error,
-    setEmail,
-    setPassword,
-    handleSubmit,
-  } = useSignupForm();
+  const { email, password, error, setEmail, setPassword, handleSubmit } =
+    useSignupForm();
 
   const navigate = useNavigate();
 
@@ -20,19 +14,19 @@ function SignUp() {
     e.preventDefault();
     const { success } = await handleSubmit(e);
     if (success) {
-      navigate('/dashboard');  
+      navigate("/dashboard");
     }
   };
 
   return (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(135deg, #fff0e5 0%, #e6e0f8 100%)',
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "linear-gradient(135deg, #fff0e5 0%, #e6e0f8 100%)",
       }}
     >
       <Container maxWidth="xs">
@@ -44,13 +38,13 @@ function SignUp() {
           <Typography
             variant="h5"
             sx={{
-              fontWeight: 'bold',
-              fontSize: '2rem',
-              color: '#3E4E5E',
-              fontFamily: 'Poppins, sans-serif',
-              textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)',
+              fontWeight: "bold",
+              fontSize: "2rem",
+              color: "#3E4E5E",
+              fontFamily: "Poppins, sans-serif",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
               marginBottom: 3,
-              textAlign: 'center',
+              textAlign: "center",
             }}
           >
             ¡Únete a la aventura, amig@!
@@ -69,7 +63,7 @@ function SignUp() {
           </motion.div>
         )}
 
-        <form onSubmit={handleFormSubmit} style={{ width: '100%' }}>
+        <form onSubmit={handleFormSubmit} style={{ width: "100%" }}>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -83,7 +77,7 @@ function SignUp() {
               margin="normal"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              sx={{ fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontFamily: "Poppins, sans-serif" }}
             />
           </motion.div>
           <motion.div
@@ -99,7 +93,7 @@ function SignUp() {
               margin="normal"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              sx={{ fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontFamily: "Poppins, sans-serif" }}
             />
           </motion.div>
           <motion.div
@@ -132,14 +126,16 @@ function SignUp() {
         >
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
               mt: 3,
             }}
           >
-            <Typography sx={{ fontFamily: 'Poppins, sans-serif', textAlign: 'center' }}>
-              ¿Ya tienes cuenta?{' '}
+            <Typography
+              sx={{ fontFamily: "Poppins, sans-serif", textAlign: "center" }}
+            >
+              ¿Ya tienes cuenta?{" "}
               <Button color="secondary" component={Link} to="/login">
                 Iniciar sesión
               </Button>

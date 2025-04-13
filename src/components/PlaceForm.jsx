@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
-import { Box, TextField, Button, Typography, Container, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
-import { motion } from 'framer-motion';
+import React, { useState } from "react";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  Container,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+import { motion } from "framer-motion";
 import useAddPlace from "../hooks/useAddPlace";
 
-const AddPlaceForm = () => {
-  const [name, setName] = useState('');
-  const [location, setLocation] = useState('');
-  const [category, setCategory] = useState('');
-  const [description, setDescription] = useState('');
-  const [error, setError] = useState('');
+const AddPlaceForm = ({ onPlaceAdded }) => {
+  const [name, setName] = useState("");
+  const [location, setLocation] = useState("");
+  const [category, setCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [error, setError] = useState("");
   const addPlace = useAddPlace();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!name || !location || !category) {
-      setError('¡Nombre, ubicación y categoría son obligatorios!');
+      setError("¡Nombre, ubicación y categoría son obligatorios!");
       return;
     }
 
@@ -28,15 +38,17 @@ const AddPlaceForm = () => {
 
     try {
       await addPlace(placeData);
-      setName('');
-      setLocation('');
-      setCategory('');
-      setDescription('');
-      setError('');
-      console.log('Lugar añadido correctamente');
+      setName("");
+      setLocation("");
+      setCategory("");
+      setDescription("");
+      setError("");
+      console.log("Lugar añadido correctamente");
+
+      if (onPlaceAdded) onPlaceAdded();
     } catch (err) {
       console.error(err.message);
-      setError('Hubo un error al guardar el lugar.');
+      setError("Hubo un error al guardar el lugar.");
     }
   };
 
@@ -44,23 +56,34 @@ const AddPlaceForm = () => {
     <Container maxWidth="xs" sx={{ mt: 8 }}>
       <Box
         sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          background: 'linear-gradient(135deg, #fff0e5 0%, #e6e0f8 100%)',
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          background: "linear-gradient(135deg, #fff0e5 0%, #e6e0f8 100%)",
           padding: 3,
           borderRadius: 2,
           boxShadow: 3,
-          minHeight: '70vh',
+          minHeight: "70vh",
         }}
       >
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: '2rem', color: '#3E4E5E', fontFamily: 'Poppins, sans-serif', textShadow: '1px 1px 2px rgba(0, 0, 0, 0.3)', marginBottom: 3 }}>
-            Añadir un lugar
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: "bold",
+              fontSize: "2rem",
+              color: "#3E4E5E",
+              fontFamily: "Poppins, sans-serif",
+              textShadow: "1px 1px 2px rgba(0, 0, 0, 0.3)",
+              marginBottom: 3,
+              textAlign: "center",
+            }}
+          >
+            ¡Añade ese sitio que te flipa!
           </Typography>
         </motion.div>
 
@@ -76,8 +99,12 @@ const AddPlaceForm = () => {
           </motion.div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 0.6 }}>
+        <form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+          >
             <TextField
               label="Nombre del Lugar"
               variant="outlined"
@@ -85,10 +112,14 @@ const AddPlaceForm = () => {
               margin="normal"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              sx={{ fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontFamily: "Poppins, sans-serif" }}
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.6 }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+          >
             <TextField
               label="Ubicación"
               variant="outlined"
@@ -96,11 +127,19 @@ const AddPlaceForm = () => {
               margin="normal"
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              sx={{ fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontFamily: "Poppins, sans-serif" }}
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1, duration: 0.6 }}>
-            <FormControl fullWidth margin="normal" sx={{ fontFamily: 'Poppins, sans-serif' }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1, duration: 0.6 }}
+          >
+            <FormControl
+              fullWidth
+              margin="normal"
+              sx={{ fontFamily: "Poppins, sans-serif" }}
+            >
               <InputLabel>Categoría</InputLabel>
               <Select
                 value={category}
@@ -123,7 +162,11 @@ const AddPlaceForm = () => {
               </Select>
             </FormControl>
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 0.6 }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2, duration: 0.6 }}
+          >
             <TextField
               label="Descripción"
               variant="outlined"
@@ -133,10 +176,14 @@ const AddPlaceForm = () => {
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              sx={{ fontFamily: 'Poppins, sans-serif' }}
+              sx={{ fontFamily: "Poppins, sans-serif" }}
             />
           </motion.div>
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 0.8 }}>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4, duration: 0.8 }}
+          >
             <Button
               type="submit"
               variant="contained"

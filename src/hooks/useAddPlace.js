@@ -15,12 +15,17 @@ const useAddPlace = () => {
       },
     };
 
-    const dataWithUser = { 
+    const dataWithUser = {
       ...placeData,
-      user: userId };
+      user: userId,
+    };
 
     try {
-      const response = await axiosInstance.post("api/places/", dataWithUser, config);
+      const response = await axiosInstance.post(
+        "api/places/",
+        dataWithUser,
+        config
+      );
       return response.data;
     } catch (error) {
       throw new Error("Error al añadir el lugar.");

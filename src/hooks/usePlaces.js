@@ -26,10 +26,8 @@ const usePlaces = () => {
         let response;
 
         try {
-          // Intento inicial
           response = await axiosInstance.get("api/places/", config);
         } catch (err) {
-          // Si token expiró, intento refrescarlo
           if (
             err.response?.status === 401 &&
             err.response?.data?.code === "token_not_valid"
@@ -40,15 +38,16 @@ const usePlaces = () => {
               throw new Error("No hay refresh token disponible.");
             }
 
-            // Pido un nuevo token
-            const refreshResponse = await axiosInstance.post("api/token/refresh/", {
-              refresh: refreshToken,
-            });
+            const refreshResponse = await axiosInstance.post(
+              "api/token/refresh/",
+              {
+                refresh: refreshToken,
+              }
+            );
 
             const newAccess = refreshResponse.data.access;
             localStorage.setItem("access_token", newAccess);
 
-            // Reintento con el nuevo token
             config.headers.Authorization = `Bearer ${newAccess}`;
             response = await axiosInstance.get("api/places/", config);
           } else {

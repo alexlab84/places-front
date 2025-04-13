@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
-import MapIcon from "@mui/icons-material/Map"; // para "mis lugares"
-import PersonAddIcon from "@mui/icons-material/PersonAdd"; // para "registro"
+import MapIcon from "@mui/icons-material/Map";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
   return (
