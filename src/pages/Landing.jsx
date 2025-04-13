@@ -98,7 +98,7 @@ function Landing() {
                 component={Link}
                 to="/signUp"
               >
-                Apúntame al club
+                Apúntate al club
               </Button>
             </motion.div>
           </Box>

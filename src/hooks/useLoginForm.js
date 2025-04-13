@@ -18,10 +18,11 @@ const useLoginForm = () => {
   
       try {
         const response = await axiosInstance.post("api/login/", credentials);
-        const { access, refresh } = response.data;
+        const { access, refresh, user_id } = response.data;
   
         localStorage.setItem("access_token", access);
         localStorage.setItem("refresh_token", refresh);
+        localStorage.setItem("user_id", user_id);
   
         setError("");
         navigate("/dashboard");

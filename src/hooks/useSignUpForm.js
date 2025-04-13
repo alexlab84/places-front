@@ -14,10 +14,11 @@ const useSignUpForm = () => {
         password,
       });
 
-      const { access_token, refresh_token } = response.data;
+      const { access_token, refresh_token, user } = response.data;
 
       localStorage.setItem("access_token", access_token);
       localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("user_id", user.id);
 
       axiosInstance.defaults.headers[
         "Authorization"
