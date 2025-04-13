@@ -9,19 +9,52 @@ const usePlaces = () => {
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
-        const token = localStorage.getItem("access_token");
+        let token = localStorage.getItem("access_token");
 
         if (!token) {
           setError("No estás autenticado.");
           setLoading(false);
           return;
         }
-        const config = {
+
+        let config = {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         };
-        const response = await axiosInstance.get("api/places/", config);
+
+        let response;
+
+        try {
+          // Intento inicial
+          response = await axiosInstance.get("api/places/", config);
+        } catch (err) {
+          // Si token expiró, intento refrescarlo
+          if (
+            err.response?.status === 401 &&
+            err.response?.data?.code === "token_not_valid"
+          ) {
+            const refreshToken = localStorage.getItem("refresh_token");
+
+            if (!refreshToken) {
+              throw new Error("No hay refresh token disponible.");
+            }
+
+            // Pido un nuevo token
+            const refreshResponse = await axiosInstance.post("api/token/refresh/", {
+              refresh: refreshToken,
+            });
+
+            const newAccess = refreshResponse.data.access;
+            localStorage.setItem("access_token", newAccess);
+
+            // Reintento con el nuevo token
+            config.headers.Authorization = `Bearer ${newAccess}`;
+            response = await axiosInstance.get("api/places/", config);
+          } else {
+            throw err;
+          }
+        }
 
         setPlaces(response.data);
         setLoading(false);
