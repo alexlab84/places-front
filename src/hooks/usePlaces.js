@@ -66,7 +66,7 @@ const usePlaces = () => {
     fetchPlaces();
   }, []);
 
-  return { places, loading, error };
+  return { places, setPlaces, loading, error }; // Asegúrate de devolver setPlaces aquí
 };
 
 export default usePlaces;

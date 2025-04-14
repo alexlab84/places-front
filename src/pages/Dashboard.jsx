@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import AddPlaceForm from "../components/PlaceForm";
 import PlaceList from "../components/PlaceList";
 import { Button, Box, Container, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import usePlaces from "../hooks/usePlaces";
 
 function Dashboard() {
   const [showAddForm, setShowAddForm] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [success, setSuccess] = useState(false);
+  const { places, setPlaces, loading, error } = usePlaces(); // Debería traer lugares y setPlaces correctamente
 
   const toggleForm = () => {
     setShowAddForm((prev) => !prev);
@@ -129,7 +131,13 @@ function Dashboard() {
             ¡Las joyas que guardaste! 💎
           </Typography>
 
-          <PlaceList />
+          {/* Pasa `places`, `setPlaces`, `loading` y `error` a PlaceList */}
+          <PlaceList
+            places={places}
+            setPlaces={setPlaces}
+            loading={loading}
+            error={error}
+          />
         </Container>
       </Box>
     </motion.div>

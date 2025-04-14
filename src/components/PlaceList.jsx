@@ -1,11 +1,16 @@
 import { Container, Grid, Box, Typography } from "@mui/material";
 import PlaceCard from "./PlaceCard";
 import { motion } from "framer-motion";
-import usePlaces from "../hooks/usePlaces";
 
-const PlaceList = () => {
-  const { places, loading, error } = usePlaces();
-
+const PlaceList = ({ places, setPlaces, loading, error }) => {
+  const handlePlaceUpdate = (updatedPlace) => {
+  // Actualizamos el lugar en el estado local
+  setPlaces((prevPlaces) =>
+    prevPlaces.map((place) =>
+      place.id === updatedPlace.id ? { ...place, ...updatedPlace } : place
+    )
+  );
+};
   if (loading) {
     return <div>Cargando...</div>;
   }
@@ -24,7 +29,8 @@ const PlaceList = () => {
         <Grid container columns={12} spacing={4} justifyContent="center">
           {places.map((place) => (
             <Grid key={place.id} style={{ gridColumn: "span 4" }}>
-              <PlaceCard {...place} />
+              {/* Pasa el método `handlePlaceUpdate` a PlaceCard */}
+              <PlaceCard {...place} onUpdate={handlePlaceUpdate} />
             </Grid>
           ))}
         </Grid>

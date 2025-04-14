@@ -1,6 +1,9 @@
-import React from "react";
+import { useState } from "react";
 import { Card, CardContent, Typography, CardMedia } from "@mui/material";
 import { motion } from "framer-motion";
+
+import EditPlaceForm from "./EditPlaceForm";
+import { useUpdatePlace } from "../hooks/useUpdatePlace";
 
 import barImage from "../assets/bar.jpg";
 import museumImage from "../assets/museo.png";
@@ -14,17 +17,29 @@ import cityImage from "../assets/ciudad.jpg";
 import natureImage from "../assets/naturaleza.jpg";
 import hotelImage from "../assets/hotel.jpg";
 import otherImage from "../assets/otro.jpg";
+import restaurantImage from "../assets/restaurante.png";
 
 function PlaceCard({
+  id,
   name,
   location,
   category,
   category_display,
   description,
+  onUpdate,
 }) {
+  const [open, setOpen] = useState(false);
+  const [editName, setEditName] = useState(name);
+  const [editLocation, setEditLocation] = useState(location);
+  const [editDescription, setEditDescription] = useState(description);
+  const [editCategory, setEditCategory] = useState(category);
+  const [successMessage, setSuccessMessage] = useState("");  // Estado para el mensaje de éxito
+
+  const { updatePlace } = useUpdatePlace();
+
   const categoryImages = {
     bar: barImage,
-    restaurant: "/images/restaurant.gif",
+    restaurant: restaurantImage,
     museum: museumImage,
     park: parkImage,
     shopping_center: shoppingCenterImage,
@@ -38,38 +53,107 @@ function PlaceCard({
     other: otherImage,
   };
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleSave = async () => {
+  try {
+    const userId = localStorage.getItem("user_id");
+
+    // Llamar a la API para actualizar el lugar
+    const updatedPlace = await updatePlace(id, {
+      name: editName,
+      location: editLocation,
+      description: editDescription,
+      category: editCategory,
+      user: userId,
+    });
+
+    // Actualizar el estado de la categoría y otros campos antes de cerrar el formulario
+    setEditCategory(updatedPlace.category); // Asegúrate de actualizar la categoría correctamente
+    setEditName(updatedPlace.name);
+    setEditLocation(updatedPlace.location);
+    setEditDescription(updatedPlace.description);
+
+    // Mostrar mensaje de éxito
+    setSuccessMessage("¡Lugar actualizado correctamente! 🎉");
+
+    // Cerrar el formulario después de actualizar el estado
+    handleClose();
+
+    // Llamar a la función onUpdate para actualizar la vista
+    if (onUpdate) {
+      onUpdate(updatedPlace);
+    }
+
+    // Limpiar el mensaje de éxito después de 3 segundos
+    setTimeout(() => {
+      setSuccessMessage("");
+    }, 3000);
+  } catch (err) {
+    console.error("Error al actualizar el lugar:", err);
+  }
+};
+
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-    >
-      <Card sx={{ maxWidth: 345 }}>
-        <CardMedia
-          component="img"
-          height="140"
-          image={categoryImages[category]}
-          alt={category}
-        />
-        <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-            {name}
-          </Typography>
-          <Typography color="text.secondary">{location}</Typography>
-          <Typography
-            variant="body2"
-            sx={{ fontStyle: "italic", color: "#4E5A64" }}
-          >
-            {category_display}
-          </Typography>
-          {description && (
-            <Typography variant="body1" sx={{ marginTop: 1, color: "#3E4E5E" }}>
-              {description}
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        onClick={handleOpen}
+        style={{ cursor: "pointer" }}
+      >
+        <Card sx={{ maxWidth: 345 }}>
+          <CardMedia
+            component="img"
+            height="140"
+            image={categoryImages[category]}
+            alt={category}
+          />
+          <CardContent>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              {name}
             </Typography>
-          )}
-        </CardContent>
-      </Card>
-    </motion.div>
+            <Typography color="text.secondary">{location}</Typography>
+            <Typography
+              variant="body2"
+              sx={{ fontStyle: "italic", color: "#4E5A64" }}
+            >
+              {category_display}
+            </Typography>
+            {description && (
+              <Typography variant="body1" sx={{ marginTop: 1, color: "#3E4E5E" }}>
+                {description}
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Mensaje de éxito */}
+      {successMessage && (
+        <Typography variant="body2" sx={{ color: "green", textAlign: "center", marginTop: "10px" }}>
+          {successMessage}
+        </Typography>
+      )}
+
+      {/* Formulario de edición */}
+      <EditPlaceForm
+        open={open}
+        handleClose={handleClose}
+        handleSave={handleSave}
+        name={editName}
+        setName={setEditName}
+        location={editLocation}
+        setLocation={setEditLocation}
+        description={editDescription}
+        setDescription={setEditDescription}
+        category={editCategory}
+        setCategory={setEditCategory}
+      />
+    </>
   );
 }
 
