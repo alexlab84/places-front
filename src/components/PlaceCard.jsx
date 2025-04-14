@@ -1,10 +1,8 @@
 import { useState } from "react";
-import { Card, CardContent, Typography, CardMedia } from "@mui/material";
+import { Card, CardContent, Typography, CardMedia, Snackbar, Alert } from "@mui/material";
 import { motion } from "framer-motion";
-
 import EditPlaceForm from "./EditPlaceForm";
 import { useUpdatePlace } from "../hooks/useUpdatePlace";
-
 import barImage from "../assets/bar.jpg";
 import museumImage from "../assets/museo.png";
 import parkImage from "../assets/parque.png";
@@ -33,7 +31,8 @@ function PlaceCard({
   const [editLocation, setEditLocation] = useState(location);
   const [editDescription, setEditDescription] = useState(description);
   const [editCategory, setEditCategory] = useState(category);
-  const [successMessage, setSuccessMessage] = useState("");  // Estado para el mensaje de éxito
+  
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const { updatePlace } = useUpdatePlace();
 
@@ -57,44 +56,43 @@ function PlaceCard({
   const handleClose = () => setOpen(false);
 
   const handleSave = async () => {
-  try {
-    const userId = localStorage.getItem("user_id");
+    try {
+      const userId = localStorage.getItem("user_id");
 
-    // Llamar a la API para actualizar el lugar
-    const updatedPlace = await updatePlace(id, {
-      name: editName,
-      location: editLocation,
-      description: editDescription,
-      category: editCategory,
-      user: userId,
-    });
+      // Llamar a la API para actualizar el lugar
+      const updatedPlace = await updatePlace(id, {
+        name: editName,
+        location: editLocation,
+        description: editDescription,
+        category: editCategory,
+        user: userId,
+      });
 
-    // Actualizar el estado de la categoría y otros campos antes de cerrar el formulario
-    setEditCategory(updatedPlace.category); // Asegúrate de actualizar la categoría correctamente
-    setEditName(updatedPlace.name);
-    setEditLocation(updatedPlace.location);
-    setEditDescription(updatedPlace.description);
+      // Actualizar el estado con los datos actualizados
+      setEditCategory(updatedPlace.category);
+      setEditName(updatedPlace.name);
+      setEditLocation(updatedPlace.location);
+      setEditDescription(updatedPlace.description);
 
-    // Mostrar mensaje de éxito
-    setSuccessMessage("¡Lugar actualizado correctamente! 🎉");
+      // Mostrar mensaje de éxito
+      
+      setSnackbarOpen(true);
 
-    // Cerrar el formulario después de actualizar el estado
-    handleClose();
+      // Llamar a la función onUpdate para actualizar la vista
+      if (onUpdate) {
+        onUpdate(updatedPlace);
+      }
 
-    // Llamar a la función onUpdate para actualizar la vista
-    if (onUpdate) {
-      onUpdate(updatedPlace);
+      // Cerrar el formulario después de unos segundos
+      setTimeout(() => {
+        setSnackbarOpen(false);
+        handleClose();
+        
+      }, 3000);
+    } catch (err) {
+      console.error("Error al actualizar el lugar:", err);
     }
-
-    // Limpiar el mensaje de éxito después de 3 segundos
-    setTimeout(() => {
-      setSuccessMessage("");
-    }, 3000);
-  } catch (err) {
-    console.error("Error al actualizar el lugar:", err);
-  }
-};
-
+  };
 
   return (
     <>
@@ -132,12 +130,7 @@ function PlaceCard({
         </Card>
       </motion.div>
 
-      {/* Mensaje de éxito */}
-      {successMessage && (
-        <Typography variant="body2" sx={{ color: "green", textAlign: "center", marginTop: "10px" }}>
-          {successMessage}
-        </Typography>
-      )}
+      
 
       {/* Formulario de edición */}
       <EditPlaceForm
@@ -152,7 +145,25 @@ function PlaceCard({
         setDescription={setEditDescription}
         category={editCategory}
         setCategory={setEditCategory}
+        
       />
+      {/* Snackbar con el mensaje de éxito */}
+      <Snackbar
+  open={snackbarOpen}
+  autoHideDuration={3000}
+  onClose={() => setSnackbarOpen(false)}
+  sx={{
+    "& .MuiSnackbarContent-root": {
+      backgroundColor: "#4A90E2", // Asegura que el fondo sea el mismo color
+      fontFamily: "Poppins, sans-serif", // Usa la misma fuente
+      fontWeight: "bold",
+    },
+  }}
+>
+  <Alert onClose={() => setSnackbarOpen(false)} severity="success" sx={{ width: "100%", fontFamily: "Poppins, sans-serif" }}>
+    Lugar actualizado con éxito!
+  </Alert>
+</Snackbar>
     </>
   );
 }
