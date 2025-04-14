@@ -5,6 +5,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import LoginIcon from "@mui/icons-material/Login";
 import MapIcon from "@mui/icons-material/Map";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import LogoutButton from "./LogoutButton";
 
 const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
   return (
@@ -43,7 +44,7 @@ const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
             textShadow: "1px 1px 2px rgba(0,0,0,0.2)",
           }}
         >
-          Explora lo que te mola 🧭
+          Explora lo que te mola ⭐
         </Typography>
 
         <Button
@@ -105,6 +106,16 @@ const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
         >
           Únete al club
         </Button>
+        <LogoutButton
+    onClickExtra={toggleDrawer}
+    showText={true}
+    styleProps={{
+      justifyContent: "flex-start",
+      fontWeight: 500,
+      textTransform: "none",
+      color: "#3E4E5E",
+    }}
+  /> 
       </Box>
     </Drawer>
   );

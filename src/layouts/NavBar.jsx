@@ -2,10 +2,18 @@ import { Link } from "react-router-dom";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import CustomDrawer from "../components/Drawer";
+import LogoutButton from "../components/LogoutButton";
+import { motion } from "framer-motion";
 
 const NavBar = ({ drawerOpen, toggleDrawer }) => {
+  const isLoggedIn = Boolean(localStorage.getItem("access_token"));
   return (
     <>
+     <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+      >
       <AppBar position="sticky" sx={{ backgroundColor: "#4A90E2" }}>
         <Toolbar>
           <IconButton
@@ -38,7 +46,7 @@ const NavBar = ({ drawerOpen, toggleDrawer }) => {
             to="/"
             sx={{ display: { xs: "none", md: "inline-block" } }}
           >
-            Inicio
+            Casa
           </Button>
           <Button
             color="inherit"
@@ -46,7 +54,7 @@ const NavBar = ({ drawerOpen, toggleDrawer }) => {
             to="/login"
             sx={{ display: { xs: "none", md: "inline-block" } }}
           >
-            Login
+            Acceder a mi baúl
           </Button>
           <Button
             color="inherit"
@@ -54,11 +62,29 @@ const NavBar = ({ drawerOpen, toggleDrawer }) => {
             to="/dashboard"
             sx={{ display: { xs: "none", md: "inline-block" } }}
           >
-            Dashboard
+            Mis movidas
           </Button>
+          <Button
+              color="inherit"
+              component={Link}
+              to="/signUp"
+              sx={{ display: { xs: "none", md: "inline-block" } }}
+            >
+              Únete al club
+            </Button>
+          {/* 🔐 Logout solo si está logueado */}
+          {isLoggedIn && (
+            <LogoutButton
+            variant="icon"
+            styleProps={{
+              display: { xs: "none", md: "inline-flex" },
+              ml: 2,
+            }}
+          />
+          )}
         </Toolbar>
       </AppBar>
-
+      </motion.div>
       <CustomDrawer drawerOpen={drawerOpen} toggleDrawer={toggleDrawer} />
     </>
   );
